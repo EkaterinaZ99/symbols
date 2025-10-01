@@ -1,12 +1,46 @@
 <html background="#000">
+
 <head>
-  <title>Documents</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Grid Selection</title>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
 
   <meta charset="UTF-8">
+<!--TODO: move styles to  design systems or to component?-->
+  <style>
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(15, 50px);
+      grid-template-rows: repeat(15, 50px);
+      cursor: pointer;
+      gap: 5px;
+    }
+    .grid-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: lightgray;
+    }
+    .grid-item-blue {
+      background: lightblue;
+    }
+    .grid-footer{
+      display:grid;
+      columns:'1fr 2fr';
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
 </head>
+
 <body>
   <script type="module" src="./src/index.js"></script>
+  <h1>Grid Selection</h1>
+  <div class="grid" id="grid"></div>
+  <div class="grid-footer">
+  <div id="totalselected"></div>
+  <div id="coordinates"></div>
+  </div>
 </body>
 </html>
