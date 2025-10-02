@@ -1,6 +1,8 @@
 'use strict'
 
-import { Flex, Link, Grid, Box} from 'smbls'
+import { Flex, Link, Grid, Box, Div } from 'smbls'
+
+
 
 export const Header = {
   extend: Flex,
@@ -18,12 +20,12 @@ export const Header = {
         textDecoration: window.location.pathname === props.href ? 'underline' : 'none'
       })
     },
-    Text_logo: { href: '/', text: 'Hello!2222' },
+    Text_logo: { href: '/', text: 'Hello' },
     Text_about: { href: '/about', text: 'About' }
   },
 
   ThemeSwitcher: {},
-  GridExample:{}
+  GridExample: {}
 }
 
 export const ThemeSwitcher = {
@@ -55,105 +57,61 @@ export const Footer = {
   }
 }
 
-export const videos = [
-  {
-    title: 'Organize and review libraries',
-    src: 'https://www.youtube.com/embed/5qo-zLDQdG0'
-  },
-  {
-    title: 'Publish to production',
-    src: 'https://www.youtube.com/embed/bXtvyqEC8Fo'
-  },
-  {
-    title: 'Documentation tools',
-    src: 'https://www.youtube.com/embed/llcDv3OvIw4'
-  },
-  {
-    title: 'Organize and review libraries',
-    src: 'https://www.youtube.com/embed/5qo-zLDQdG0'
-  },
-  {
-    title: 'Publish to production',
-    src: 'https://www.youtube.com/embed/bXtvyqEC8Fo'
-  },
-  {
-    title: 'Documentation tools',
-    src: 'https://www.youtube.com/embed/llcDv3OvIw4'
-  }
-]
 
-/*export const GridExample = {
-  Grid: {
-    columns: '1fr 2fr',
-    gap: 'B',
-    children: videos,
-    childrenAs: 'state',
-    childProps: (el, st) => ({
-      Div: { // represents GridItem element
-        H6: {
-          text: st.title
-        },
-        Iframe: {
-          src: st.src,
-        }
+/**********GRID RELATED***********************/
+
+const gridParameters = {
+  rows: 15,
+  cols: 15,
+  gridcontainerId: 'grid'
+}
+export const gridCells =[];
+ let cnt = 1;
+    // Generate grid cells
+    for (let row = 1; row < gridParameters.rows + 1; row++) {
+      for (let col = 1; col < gridParameters.cols + 1; col++) {
+       gridCells.push({col:col, row:row, cnt:cnt});
+        cnt++;
       }
-    })
-  }
-}*/
-
-export const GridItem = {
-  display: 'flex',
-  'justify-content': 'center',
-  'align-items': 'center',
-  background: 'lightgray'
-}
-
-export const gridCells = [];
-for (let i=0; i<25; i++) {
-  gridCells.push({
-    ...GridItem
-  });
-}
-
-export const GridItemSelected = {
-    background: 'lightblue'
-}
+    }
 
 export const GridExample = {
+  //extends: Grid,   <==NOTE: when extend adds extra "cell" at the beginning of the grid(?)
+  //props: {
   Grid: {
-    columns: '1fr 2fr',
-    gap: 'B',
-    children: videos,
+    id: 'grid',
+    display: 'grid',
+    columns: 'repeat(15, 50px)', //TODO: make repeat etc calculation dynamic
+    gap: 'A',
+    backgroundcolor: 'red',
+    children: gridCells,
     childrenAs: 'state',
+    onmouseup: (event, element, state) => { 
+      let elements = document.getElementsByClassName("grid-item-blue");
+      // Update output
+      const elementsCnt = elements.length
+      document.getElementById('totalselected').textContent = `Total cells selected: ${elementsCnt}`;  
+      //document.getElementById('coordinates').textContent = `Selection coordinates: [${elements[elementsCnt - 1].col} , ${elements[elementsCnt - 1].row}]`; 
+      document.getElementById('coordinates').textContent = `Selection coordinates (TODO: needs to be fixed): [${gridCells[elementsCnt - 1].col} , ${gridCells[elementsCnt - 1].row}]`; //TODO: FIX Counters (works in Vanilla)
+     }, 
     childProps: (el, st) => ({
-      Div: { // represents GridItem element
-        H6: {
-          text: st.title
-        },
-        Iframe: {
-          src: st.src,
-        }
+      tag: 'div',
+      text: `[${st.col},${st.row}]`,
+      class: 'grid-item',
+      onmouseover: (event, element, state) => {
+        Array.from(document.querySelectorAll('.grid-item')).forEach(node => {
+          var nodePosition = node.getBoundingClientRect();
+          if (nodePosition.x <= event.clientX && nodePosition.y <= event.clientY) {
+            node.classList.add('grid-item-blue')
+          }
+          else {
+            node.classList.remove('grid-item-blue')
+          }
+        })
       }
-    })
+    }
+    )
   }
 }
-export const GridExample1 = {
-  Grid: {
-    columns: 'repeat(5, 50px)',
-    'grid-template-columns': 'repeat(5, 50px)',
-    'grid-template-rows': 'repeat(5, 50px)',
-    gap: 'B',
-    children: videos,
-    childrenAs: 'state',
-    childProps: (el, st) => ({
-      Div: { // represents GridItem element
-        H6: {
-          text: st.title
-        },
-        Iframe: {
-          src: st.src,
-        }
-      }
-    })
-  }
-}
+
+
