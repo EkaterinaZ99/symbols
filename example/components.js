@@ -18,7 +18,7 @@ export const Header = {
         textDecoration: window.location.pathname === props.href ? 'underline' : 'none'
       })
     },
-    Text_logo: { href: '/', text: 'Hello!' },
+    Text_logo: { href: '/', text: 'Hello!!!!!' },
     Text_about: { href: '/about', text: 'About' }
   },
 
